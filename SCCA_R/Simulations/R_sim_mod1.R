@@ -1,8 +1,8 @@
-
 library(glmnet)
+library(Matrix)
 
-p <- 200
-q <- 200
+p <- 300
+q <- 300 
 n <- 500
 
 sigma.X <- matrix(0,p,p)
@@ -43,11 +43,10 @@ set.seed(314159)
 Z <- matrix(rnorm(2*n*(p+q)), nrow = 2*n)
 Z <- Z%*%sigma.sqrt
 
-
 ################################################################################
 #Check Point 2 < ----
 # To be filled ....
-###############################################################################
+################################################################################
 
 Y <- Z[ , 1:q]
 X <- Z[ , (q + 1):(p + q)]
@@ -61,8 +60,11 @@ Y.tune <- Y[-id.train, ]
 
 
 sigma.Y.hat <- cov(Y.train)
+#print(sigma.Y.hat)
 sigma.X.hat <- cov(X.train) 
+#print(sigma.X.hat)
 sigma.YX.hat <- cov(Y.train, X.train)
+#print(sigma.YX.hat)
 
 
 X.train <- sweep(X.train, 2, apply(X.train, 2, mean))
@@ -89,9 +91,14 @@ for(i.init in 1:length(init.opt)){
     obj <- SCCA(x = X.train, y = Y.train, lambda.alpha = lambda.alpha, lambda.beta = lambda.beta,
                 npairs = 1, alpha.init = alpha.init, beta.init = beta.init)
     rho.lambda[i.lambda, i.init] <- cor(X.tune %*% obj$beta[ , 1], Y.tune %*% obj$alpha[ , 1])^2
-    if(rho.lambda[i.lambda, i.init] < 1e-6) break
+    #if(rho.lambda[i.lambda, i.init] < 1e-6) break
   }
 }
+
+################################################################################
+#Check Point 3 < ----
+# To be filled ....
+################################################################################
 
 id.best <- which(rho.lambda == max(rho.lambda), arr.ind = TRUE)
 bestlambda <- lambda[id.best[1]]
