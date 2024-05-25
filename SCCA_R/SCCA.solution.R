@@ -1,4 +1,3 @@
-
 #### The function SCCA.solution is used by SCCA. 
 SCCA.solution <- function(x, y, x.Omega, y.Omega, alpha0, beta0, lambda.alpha, lambda.beta, niter = 100, glmnet.alg = NULL, eps=1e-4){
   n <- nrow(x)
